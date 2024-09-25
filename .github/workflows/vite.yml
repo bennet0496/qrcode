@@ -5,21 +5,19 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  build_publish:
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [22.x]
-
     steps:
     - uses: actions/checkout@v4
-
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
-
     - name: Build
       run: |
         npm install
@@ -27,7 +25,6 @@ jobs:
         cd dist
         tar czvf ../qrcode-dist.tar.gz *
         zip ../qrcode-dist.zip *
-        
     - run: |
         gh release create $(date +%Y%m%d)-$(git rev-parse --short HEAD) qrcode-dist.tar.gz qrcode-dist.zip
       env:
