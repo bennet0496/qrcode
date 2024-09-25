@@ -24,7 +24,7 @@ jobs:
         npx vite build
         cd dist
         tar czvf ../qrcode-dist.tar.gz *
-        zip ../qrcode-dist.zip *
+        zip -r ../qrcode-dist.zip *
     - run: |
         gh release create $(date +%Y%m%d)-$(git rev-parse --short HEAD) qrcode-dist.tar.gz qrcode-dist.zip
       env:
