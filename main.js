@@ -7,10 +7,6 @@ const canvas = document.querySelector('canvas#canvas')
 
 const text = decodeURIComponent(window.location.hash.substring(1))
 
-console.log(QRCode.toCanvas);
-
-
-
 QRCode.toCanvas(canvas, text, {errorCorrectionLevel: 'H'}, function (error) {
     if (error) {
         console.error(error)
