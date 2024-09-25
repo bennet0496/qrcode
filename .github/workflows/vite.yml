@@ -2,8 +2,7 @@ name: NodeJS with Vite
 
 on:
   push:
-    tags:
-    - '*'
+    branches: [ "main" ]
 
 jobs:
   build:
@@ -26,18 +25,12 @@ jobs:
         npm install
         npx vite build
         cd dist
-        tar czvf ../dist.tar.gz *
-        zip ../dist.zip *
+        tar czvf ../qrcode-dist.tar.gz *
+        zip ../qrcode-dist.zip *
         
-    - uses: Shopify/upload-to-release@v2.0.0
-      with:
-        name: qrcode-dist.tar.zg
-        path: dist.tar.gz
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-        content-type: application/tar+gzip # Optional
-    - uses: Shopify/upload-to-release@v2.0.0
-      with:
-        name: qrcode-dist.zip
-        path: dist.zip
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-        content-type: application/zip # Optional
+    - run: |
+        gh release create $(date +%Y%m%d)-$(git rev-parse --short HEAD) qrcode-dist.tar.gz qrcode-dist.zip
+      env:
+        GITHUB_TOKEN: ${{ github.TOKEN }}
+        shell: bash
+        name: Creates a release in GitHub and uploads attachments
