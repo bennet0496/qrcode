@@ -23,3 +23,8 @@ const scaleTo = Math.min(window.innerHeight, window.innerWidth) * .5;
 
 canvas.style.width = scaleTo + "px";
 canvas.style.height = scaleTo + "px";
+
+setTimeout(function () {
+    window.location.hash = "";
+    canvas.outerHTML = `QR Code expired`;
+}, 5 * 60 * 1000);
