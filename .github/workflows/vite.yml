@@ -1,0 +1,43 @@
+name: NodeJS with Vite
+
+on:
+  push:
+    tags:
+    - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [22.x]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Build
+      run: |
+        npm install
+        npx vite build
+        cd dist
+        tar czvf ../dist.tar.gz *
+        zip ../dist.zip *
+        
+    - uses: Shopify/upload-to-release@v2.0.0
+      with:
+        name: qrcode-dist.tar.zg
+        path: dist.tar.gz
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        content-type: application/tar+gzip # Optional
+    - uses: Shopify/upload-to-release@v2.0.0
+      with:
+        name: qrcode-dist.zip
+        path: dist.zip
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        content-type: application/zip # Optional
